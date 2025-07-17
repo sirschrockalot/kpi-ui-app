@@ -266,8 +266,11 @@ const styles = {
   }
 };
 
+const DEFAULT_API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:3000';
+const JWT_TOKEN = process.env.REACT_APP_JWT_TOKEN;
+
 const AircallSlackUI: React.FC = () => {
-  const [apiUrl, setApiUrl] = useState<string>('http://localhost:3000');
+  const [apiUrl, setApiUrl] = useState<string>(DEFAULT_API_URL);
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [connections, setConnections] = useState<ConnectionsResponse | null>(null);
@@ -389,6 +392,7 @@ const AircallSlackUI: React.FC = () => {
       const response = await fetch(`${apiUrl}${endpoint}`, {
         headers: {
           'Content-Type': 'application/json',
+          ...(JWT_TOKEN ? { 'Authorization': `Bearer ${JWT_TOKEN}` } : {}),
           ...options.headers
         },
         signal: controller.signal,
