@@ -270,7 +270,6 @@ const DEFAULT_API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localho
 const JWT_TOKEN = process.env.REACT_APP_JWT_TOKEN;
 
 const AircallSlackUI: React.FC = () => {
-  const [apiUrl, setApiUrl] = useState<string>(DEFAULT_API_URL);
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [connections, setConnections] = useState<ConnectionsResponse | null>(null);
@@ -313,11 +312,11 @@ const AircallSlackUI: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(checkBackendAvailability, 30000); // Check every 30 seconds
     return () => clearInterval(interval);
-  }, [apiUrl]);
+  }, []); // Removed apiUrl from dependency array as it's no longer a state variable
 
   const checkBackendAvailability = async (): Promise<void> => {
     try {
-      const response = await fetch(`${apiUrl}/health`, {
+      const response = await fetch(`${DEFAULT_API_URL}/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal: AbortSignal.timeout(5000) // 5 second timeout
@@ -389,7 +388,7 @@ const AircallSlackUI: React.FC = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
       
-      const response = await fetch(`${apiUrl}${endpoint}`, {
+      const response = await fetch(`${DEFAULT_API_URL}${endpoint}`, {
         headers: {
           'Content-Type': 'application/json',
           ...(JWT_TOKEN ? { 'Authorization': `Bearer ${JWT_TOKEN}` } : {}),
@@ -565,10 +564,6 @@ const AircallSlackUI: React.FC = () => {
     setCustomReport(prev => ({ ...prev, [field]: e.target.value }));
   };
 
-  const handleApiUrlChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setApiUrl(e.target.value);
-  };
-
   const getConnectionBadgeStyle = (status: string) => {
     return status === 'connected' ? styles.badgeSuccess : styles.badgeError;
   };
@@ -666,19 +661,8 @@ const AircallSlackUI: React.FC = () => {
                   </button>
                 )}
               </div>
+              {/* Removed API URL input field */}
               <div>
-                <label style={styles.label}>API URL</label>
-                <input
-                  type="text"
-                  value={apiUrl}
-                  onChange={handleApiUrlChange}
-                  style={getInputStyle('apiUrl')}
-                  onFocus={() => setFocusedInput('apiUrl')}
-                  onBlur={() => setFocusedInput('')}
-                  placeholder="http://localhost:3000"
-                />
-              </div>
-              <div style={{ marginTop: '8px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
                   <input
                     type="checkbox"
