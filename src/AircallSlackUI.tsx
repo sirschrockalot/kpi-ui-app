@@ -552,7 +552,7 @@ const AircallSlackUI: React.FC = () => {
     const Icon = type === 'error' ? AlertCircle : CheckCircle;
     
     return (
-      <div style={{...styles.alert, ...alertStyle}}>
+      <div className={`alert ${type}`}>
         <Icon size={20} />
         <span>{message}</span>
       </div>
@@ -634,11 +634,11 @@ const AircallSlackUI: React.FC = () => {
       
       <div style={styles.maxWidth}>
         {/* Header */}
-        <div style={styles.card}>
+        <div className="card">
           <div style={styles.header as React.CSSProperties}>
             <div>
               <h1 style={styles.title}>
-                <MessageSquare size={32} style={styles.icon} color="#2563eb" />
+                <MessageSquare size={32} style={styles.icon} />
                 Aircall Slack Agent
               </h1>
               <p style={styles.subtitle}>Generate and send call activity reports to Slack</p>
@@ -646,7 +646,7 @@ const AircallSlackUI: React.FC = () => {
             <div style={styles.apiUrlContainer}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                 <span style={{ fontSize: '14px', fontWeight: '500' }}>Backend:</span>
-                <span style={{...styles.badge, ...getBackendStatusStyle()}}>
+                <span className={`badge ${backendStatus === 'online' ? 'success' : backendStatus === 'offline' ? 'error' : ''}`}>
                   {getBackendStatusText()}
                 </span>
                 {backendStatus === 'offline' && (
@@ -698,12 +698,7 @@ const AircallSlackUI: React.FC = () => {
 
         {/* Offline Mode Banner */}
         {isOfflineMode && (
-          <div style={{
-            ...styles.alert,
-            backgroundColor: '#fef3c7',
-            borderColor: '#f59e0b',
-            color: '#92400e'
-          }}>
+          <div className="alert info">
             <AlertCircle size={20} />
             <div>
               <strong>Offline Mode:</strong> Backend service is not available. Using mock data for demonstration.
@@ -716,7 +711,7 @@ const AircallSlackUI: React.FC = () => {
 
         <div style={styles.grid}>
           {/* System Status */}
-          <div style={styles.card}>
+          <div className="card">
             <h2 style={styles.sectionTitle}>
               <Server size={20} style={styles.icon} />
               System Status
@@ -726,7 +721,7 @@ const AircallSlackUI: React.FC = () => {
               <button
                 onClick={checkHealth}
                 disabled={loading}
-                style={getButtonStyle(styles.buttonPrimary)}
+                className="btn-primary"
               >
                 {loading ? 
                   <RefreshCw size={16} style={{...styles.icon, ...styles.spin}} /> : 
@@ -738,7 +733,7 @@ const AircallSlackUI: React.FC = () => {
               <button
                 onClick={getStatus}
                 disabled={loading}
-                style={getButtonStyle(styles.buttonSuccess)}
+                className="btn-success"
               >
                 {loading ? 
                   <RefreshCw size={16} style={{...styles.icon, ...styles.spin}} /> : 
@@ -750,7 +745,7 @@ const AircallSlackUI: React.FC = () => {
               <button
                 onClick={testConnections}
                 disabled={loading}
-                style={getButtonStyle(styles.buttonIndigo)}
+                className="btn-indigo"
               >
                 {loading ? 
                   <RefreshCw size={16} style={{...styles.icon, ...styles.spin}} /> : 
@@ -792,13 +787,13 @@ const AircallSlackUI: React.FC = () => {
                 <div style={styles.statusContent as React.CSSProperties}>
                   <div style={styles.statusRow}>
                     <span style={{ fontWeight: '500' }}>Slack:</span>
-                    <span style={{...styles.badge, ...getConnectionBadgeStyle(connections.connections.slack)}}>
+                    <span className={`badge ${getConnectionBadgeStyle(connections.connections.slack)}`}>
                       {connections.connections.slack}
                     </span>
                   </div>
                   <div style={styles.statusRow}>
                     <span style={{ fontWeight: '500' }}>Aircall:</span>
-                    <span style={{...styles.badge, ...getConnectionBadgeStyle(connections.connections.aircall)}}>
+                    <span className={`badge ${getConnectionBadgeStyle(connections.connections.aircall)}`}>
                       {connections.connections.aircall}
                     </span>
                   </div>
@@ -808,7 +803,7 @@ const AircallSlackUI: React.FC = () => {
           </div>
 
           {/* Quick Reports */}
-          <div style={styles.card}>
+          <div className="card">
             <h2 style={styles.sectionTitle}>
               <Send size={20} style={styles.icon} />
               Quick Reports
@@ -818,7 +813,7 @@ const AircallSlackUI: React.FC = () => {
               <button
                 onClick={() => generateReport('afternoon')}
                 disabled={loading}
-                style={getButtonStyle(styles.buttonPurple)}
+                className="btn-purple"
               >
                 {loading ? 
                   <RefreshCw size={16} style={{...styles.icon, ...styles.spin}} /> : 
@@ -830,7 +825,7 @@ const AircallSlackUI: React.FC = () => {
               <button
                 onClick={() => generateReport('night')}
                 disabled={loading}
-                style={getButtonStyle(styles.buttonOrange)}
+                className="btn-orange"
               >
                 {loading ? 
                   <RefreshCw size={16} style={{...styles.icon, ...styles.spin}} /> : 
@@ -843,7 +838,7 @@ const AircallSlackUI: React.FC = () => {
         </div>
 
         {/* Custom Report Section */}
-        <div style={styles.card}>
+        <div className="card">
           <h2 style={styles.sectionTitle}>
             <Calendar size={20} style={styles.icon} />
             Custom Report
@@ -924,7 +919,7 @@ const AircallSlackUI: React.FC = () => {
             <button
               onClick={generateCustomReport}
               disabled={loading}
-              style={getButtonStyle(styles.buttonRed)}
+              className="btn-red"
             >
               {loading ? 
                 <RefreshCw size={16} style={{...styles.icon, ...styles.spin}} /> : 

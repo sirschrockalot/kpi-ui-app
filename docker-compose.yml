@@ -3,7 +3,7 @@ services:
   kpi-ui-app:
     build: .
     ports:
-      - "3000:80"
+      - "4000:80"
     environment:
       - REACT_APP_BACKEND_API_URL=${REACT_APP_BACKEND_API_URL}
       - REACT_APP_JWT_TOKEN=${REACT_APP_JWT_TOKEN}
